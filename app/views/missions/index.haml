@@ -1,0 +1,14 @@
+%table
+  %thead
+    %tr
+      %th Name
+      %th Status
+      %th Organizations
+      %th Upcoming Milestone
+  %tbody
+    - @missions.each do |mission|
+      %tr
+        %td= mission.name
+        %td= mission.status
+        %td= mission.organizations.map(&:abbreviation).join(", ")
+        %td= mission.next_milestone.try :name
