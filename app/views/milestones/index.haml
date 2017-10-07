@@ -1,0 +1,18 @@
+.header
+
+.sidebar
+
+%table.table.table-striped.table-hover
+  %thead
+    %tr.row
+      %th Mission
+      %th Milestone
+      %th Organizations
+      %th Date
+  %tbody
+    - @milestones.each do |milestone|
+      %tr.row
+        %td= link_to milestone.mission.name, mission_path(milestone.mission.id)
+        %td= link_to milestone.name, milestone_path(milestone.id)
+        %td= milestone.mission.formatted_organizations
+        %td= milestone.date.strftime("%d/%m/%Y")

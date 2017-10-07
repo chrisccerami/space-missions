@@ -1,14 +1,14 @@
-%table
+%table.table.table-striped.table-hover
   %thead
-    %tr
+    %tr.row
       %th Name
       %th Status
       %th Organizations
       %th Upcoming Milestone
   %tbody
     - @missions.each do |mission|
-      %tr
-        %td= mission.name
+      %tr.row
+        %td= link_to mission.name, mission_path(mission.id)
         %td= mission.status
-        %td= mission.organizations.map(&:abbreviation).join(", ")
+        %td= mission.formatted_organizations
         %td= mission.next_milestone.try :name

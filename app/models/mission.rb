@@ -7,4 +7,8 @@ class Mission < ApplicationRecord
   def next_milestone
     milestones.future.order(date: :asc).first
   end
+
+  def formatted_organizations
+    organizations.map(&:abbreviation).join(", ")
+  end
 end
