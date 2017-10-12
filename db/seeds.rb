@@ -1,17 +1,3 @@
-mission_data = [
-  {name: "Mars 2020", status: "pending", organization: "NASA"},
-  {name: "Hayabusa2", status: "active", organization: "JAXA"},
-  {name: "Chang'e 4", status: "pending", organization: "CNSA"},
-  {name: "Chang'e 5", status: "pending", organization: "CNSA"},
-  {name: "OSIRIS-REx", status: "active", organization: "NASA"}
-]
-
-organization_data = [
-  {name: "National Aeronautics and Space Administration", abbreviation: "NASA"},
-  {name: "Japan Aerospace Exploration Agency", abbreviation: "JAXA"},
-  {name: "China National Space Administration", abbreviation: "CNSA"}
-]
-
 milestone_data = [
   {mission: "Mars 2020", name: "Launch", date: "31st Jul 2020"},
   {mission: "Mars 2020", name: "Mars Approach", date: "31st Mar 2021"},
@@ -29,13 +15,15 @@ milestone_data = [
   {mission: "OSIRIS-REx", name: "Earth Landing", date: "24th Sep 2023"}
 ]
 
-organization_data.each do |data|
-  Organization.find_or_create_by!(name: data[:name], abbreviation: data[:abbreviation])
+require 'csv'
+CSV.foreach("db/space_organizations.csv", headers: true) do |row|
+  Organization.find_or_create_by!(name: row["English Name"], abbreviation: row["Abbreviation"])
 end
 
-mission_data.each do |data|
-  mission = Mission.find_or_create_by!(name: data[:name], status: data[:status])
-  mission.organizations << Organization.find_by(abbreviation: data[:organization])
+CSV.foreach("db/space_missions.csv", headers: true) do |row|
+  mission = Mission.find_or_create_by!(name: row["English Name"], status: row["Status"])
+  organizations = Organization.where(abbreviation: row["Organization"].split("/"))
+  mission.organizations = organizations
   mission.save!
 end
 
